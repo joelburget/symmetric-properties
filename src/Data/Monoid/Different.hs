@@ -1,9 +1,10 @@
-module Data.Monoid.Different where
+module Data.Monoid.Different (Different(..), mkDifferent, allDifferent) where
 
 import Data.Foldable (toList)
 import Data.Set (Set)
 import qualified Data.Set as Set
 
+-- | Monoid under every element being unequal.
 data Different a
   = AllDifferent (Set a)
   | Duplicated a
@@ -23,6 +24,7 @@ instance Ord a => Monoid (Different a) where
   mappend da@(Duplicated a) _ = da
   mappend _ da@(Duplicated a) = da
 
+-- | Is every element of this foldable unequal?
 allDifferent :: (Ord a, Foldable f) => f a -> Bool
 allDifferent = allDifferent' Set.empty . toList
 

@@ -1,7 +1,8 @@
-module Data.Monoid.Same where
+module Data.Monoid.Same (Same(..), allSame) where
 
 import Data.Foldable (toList)
 
+-- | Monoid under every element being equal.
 data Same a
   = DegenerateSame
   | NotSame a a
@@ -19,6 +20,7 @@ instance Eq a => Monoid (Same a) where
   mappend ns@(NotSame _ _) _ = ns
   mappend _ ns@(NotSame _ _) = ns
 
+-- | Is every element of this foldable equal?
 allSame :: (Eq a, Foldable f) => f a -> Bool
 allSame = allSame' . toList
 
