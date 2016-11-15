@@ -1,6 +1,7 @@
 module Data.Monoid.Different (Different(..), mkDifferent, allDifferent) where
 
-import Data.Foldable (toList)
+import Data.Foldable (Foldable, toList)
+import Data.Monoid (Monoid(..))
 import Data.Set (Set)
 import qualified Data.Set as Set
 
@@ -20,7 +21,7 @@ instance Ord a => Monoid (Different a) where
     let isect = Set.intersection s1 s2
     in if Set.null isect
        then AllDifferent (Set.union s1 s2)
-       else Duplicated (Set.elemAt 0 isect)
+       else Duplicated (head $ Set.toList isect)
   mappend da@(Duplicated a) _ = da
   mappend _ da@(Duplicated a) = da
 

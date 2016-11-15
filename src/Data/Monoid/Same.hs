@@ -1,6 +1,7 @@
 module Data.Monoid.Same (Same(..), allSame) where
 
-import Data.Foldable (toList)
+import Data.Foldable (Foldable, toList)
+import Data.Monoid (Monoid(..))
 
 -- | Monoid under every element being equal.
 data Same a
