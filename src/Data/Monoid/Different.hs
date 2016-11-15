@@ -1,5 +1,6 @@
 module Data.Monoid.Different where
 
+import Data.Foldable (toList)
 import Data.Set (Set)
 import qualified Data.Set as Set
 
@@ -23,6 +24,11 @@ instance Ord a => Monoid (Different a) where
   mappend _ da@(Duplicated a) = da
 
 allDifferent :: (Ord a, Foldable f) => f a -> Bool
-allDifferent as = case foldMap mkDifferent as of
-  AllDifferent _ -> True
-  Duplicated _ -> False
+allDifferent = allDifferent' Set.empty . toList
+
+allDifferent' :: Ord a => Set a -> [a] -> Bool
+allDifferent' s [] = True
+allDifferent' s (x:xs) =
+  if x `Set.member` s
+  then False
+  else allDifferent' (Set.insert x s) xs

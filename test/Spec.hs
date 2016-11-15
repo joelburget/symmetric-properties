@@ -26,3 +26,7 @@ main = hspec $ do
     it "allDifferent [1..100]" $ allDifferent staircase @?= True
 
     it "finds a pair" $ foldMap mkDifferent oneOne @?= Duplicated 1
+
+  describe "infinite structures short-circuit" $ do
+    it "allSame [1..10]" $ allSame [1..10] @?= False
+    it "allDifferent (cycle [1..10])" $ allDifferent (cycle [1..10]) @?= False

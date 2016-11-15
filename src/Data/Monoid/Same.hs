@@ -1,5 +1,7 @@
 module Data.Monoid.Same where
 
+import Data.Foldable (toList)
+
 data Same a
   = DegenerateSame
   | NotSame a a
@@ -18,7 +20,9 @@ instance Eq a => Monoid (Same a) where
   mappend _ ns@(NotSame _ _) = ns
 
 allSame :: (Eq a, Foldable f) => f a -> Bool
-allSame as = case foldMap Same as of
-  Same a -> True
-  DegenerateSame -> True
-  NotSame _ _ -> False
+allSame = allSame' . toList
+
+allSame' :: Eq a => [a] -> Bool
+allSame' [] = True
+allSame' [a] = True
+allSame' (a:b:xs) = if a == b then allSame (b:xs) else False
