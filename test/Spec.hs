@@ -14,11 +14,11 @@ main = hspec $ do
       oneTwo = [1, 2]
       staircase = [1..100]
   describe "Same" $ do
-    it "allSame []" $ allSame empty @?= True
+    it "allSame []" $ allSame empty @?= DegenerateSame
 
     it "rejects an outlier" $ foldMap Same oneTwo @?= NotSame 1 2
 
-    it "rejects a staircase" $ allSame staircase @?= False
+    it "rejects a staircase" $ allSame_ staircase @?= False
 
   describe "Different" $ do
     it "allDifferent []" $ allDifferent empty @?= True
@@ -28,5 +28,15 @@ main = hspec $ do
     it "finds a pair" $ foldMap mkDifferent oneOne @?= Duplicated 1
 
   describe "infinite structures short-circuit" $ do
-    it "allSame [1..10]" $ allSame [1..10] @?= False
+    it "allSame_ [1..10]" $ allSame_ [1..10] @?= False
     it "allDifferent (cycle [1..10])" $ allDifferent (cycle [1..10]) @?= False
+
+  describe "nesting" $ do
+    it "lssdlfjls" $ allSame (map Same oneOne) @?= Same (Same 1)
+    it "lssdlfjls" $ allSame_ (map Same staircase) @?= False
+
+    it "lssdlfjls" $ allSame_ (map mkDifferent oneOne) @?= True
+    it "lssdlfjls" $ allSame_ (map mkDifferent staircase) @?= False
+
+    -- it "lssdlfjls" $ allDifferent (map mkDifferent oneOne) @?= False
+    -- it "lssdlfjls" $ allDifferent (map mkDifferent staircase) @?= True

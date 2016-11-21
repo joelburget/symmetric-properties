@@ -1,4 +1,4 @@
-module Data.Monoid.Same (Same(..), allSame) where
+module Data.Monoid.Same (Same(..), allSame, allSame_) where
 
 import Data.Foldable (Foldable, toList)
 import Data.Monoid (Monoid(..))
@@ -22,10 +22,15 @@ instance Eq a => Monoid (Same a) where
   mappend _ ns@(NotSame _ _) = ns
 
 -- | Is every element of this foldable equal?
-allSame :: (Eq a, Foldable f) => f a -> Bool
+allSame :: (Eq a, Foldable f) => f a -> Same a
 allSame = allSame' . toList
 
-allSame' :: Eq a => [a] -> Bool
-allSame' [] = True
-allSame' [a] = True
-allSame' (a:b:xs) = if a == b then allSame (b:xs) else False
+allSame_ :: (Eq a, Foldable f) => f a -> Bool
+allSame_ as
+  | NotSame _ _ <- allSame as = False
+  | otherwise = True
+
+allSame' :: Eq a => [a] -> Same a
+allSame' [] = DegenerateSame
+allSame' [a] = Same a
+allSame' (a:b:xs) = if a == b then allSame (b:xs) else NotSame a b
