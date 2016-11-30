@@ -17,7 +17,7 @@ instance Eq a => Monoid (Same a) where
     | a == b = sa
     | otherwise = NotSame a b
   mappend DegenerateSame a = a
-  mappend sa@(Same a) DegenerateSame = sa
+  mappend sa@(Same _a) DegenerateSame = sa
   mappend ns@(NotSame _ _) _ = ns
   mappend _ ns@(NotSame _ _) = ns
 

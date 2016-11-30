@@ -28,6 +28,7 @@ Tested-With: GHC == 7.6.3, GHC == 7.8.4, GHC == 7.10.2, GHC == 8.0.1
 library
   hs-source-dirs:      src
   exposed-modules:     Data.Monoid.Same, Data.Monoid.Different
+  ghc-options:         -Wall -fwarn-tabs -threaded -rtsopts
   build-depends:       base >= 4.6 && < 5, containers >= 0.4
   default-language:    Haskell2010
 
