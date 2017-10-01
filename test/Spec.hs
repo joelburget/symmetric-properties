@@ -4,7 +4,7 @@ import Test.HUnit
 
 import Data.Foldable
 import Data.Monoid.Same
-import Data.Monoid.Different
+import Data.Monoid.Unique
 
 main :: IO ()
 main = hspec $ do
@@ -20,23 +20,30 @@ main = hspec $ do
 
     it "rejects a staircase" $ allSame_ staircase @?= False
 
-  describe "Different" $ do
-    it "allDifferent []" $ allDifferent empty @?= True
+  describe "Unique" $ do
+    it "allUnique []" $ allUnique empty @?= True
 
-    it "allDifferent [1..100]" $ allDifferent staircase @?= True
+    it "allUnique [1..100]" $ allUnique staircase @?= True
 
-    it "finds a pair" $ foldMap mkDifferent oneOne @?= Duplicated 1
+    it "finds a pair" $ foldMap singletonUnique oneOne @?= Duplicated 1
 
   describe "infinite structures short-circuit" $ do
-    it "allSame_ [1..10]" $ allSame_ [1..10] @?= False
-    it "allDifferent (cycle [1..10])" $ allDifferent (cycle [1..10]) @?= False
+    it "allSame_ [1..]" $ allSame_ [1..] @?= False
+    it "allUnique (cycle [1..10])" $ allUnique (cycle [1..10]) @?= False
 
   describe "nesting" $ do
-    it "lssdlfjls" $ allSame (map Same oneOne) @?= Same (Same 1)
-    it "lssdlfjls" $ allSame_ (map Same staircase) @?= False
+    it "Same Same [1, 1]" $ allSame (map Same oneOne) @?= Same (Same 1)
+    it "Same Same staircase" $ allSame_ (map Same staircase) @?= False
 
-    it "lssdlfjls" $ allSame_ (map mkDifferent oneOne) @?= True
-    it "lssdlfjls" $ allSame_ (map mkDifferent staircase) @?= False
+    it "Same Unique [1, 1]" $ allSame_ (map singletonUnique oneOne) @?= True
+    it "Same Unique staircase" $
+      allSame_ (map singletonUnique staircase) @?= False
 
-    -- it "lssdlfjls" $ allDifferent (map mkDifferent oneOne) @?= False
-    -- it "lssdlfjls" $ allDifferent (map mkDifferent staircase) @?= True
+    it "Unique Unique [1, 1]" $
+      allUnique (map singletonUnique oneOne) @?= False
+    it "Unique Unique staircase" $
+      allUnique (map singletonUnique staircase) @?= True
+
+    it "Unique Same [1, 1]" $ allUnique (map Same oneOne) @?= False
+    it "Unique Same staircase" $
+      allUnique (map Same staircase) @?= True

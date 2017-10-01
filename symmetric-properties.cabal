@@ -1,16 +1,16 @@
 name:                symmetric-properties
 version:             0.1.0.0
-synopsis:            Initial project template from stack
+synopsis:            Monoids for sameness and uniqueness.
 description:
-  Test whether every element of a 'Foldable' is the 'Same' or 'Different'.
+  Test whether every element of a 'Foldable' is the 'Same' or 'Unique'.
   .
   > > allSame (replicate 1000 1)
   > True
   > > allSame [1..]
   > False
-  > > allDifferent [1..1000]
+  > > allUnique [1..1000]
   > True
-  > > allDifferent (cycle [1..100])
+  > > allUnique (cycle [1..100])
   > False
 
 homepage:            https://github.com/joelburget/symmetric-properties#readme
@@ -21,14 +21,13 @@ maintainer:          joelburget@gmail.com
 copyright:           Copyright (c) 2016 Joel Burget
 category:            Web
 build-type:          Simple
--- extra-source-files:
 cabal-version:       >=1.10
-Tested-With: GHC == 7.6.3, GHC == 7.8.4, GHC == 7.10.2, GHC == 8.0.1
+Tested-With: GHC == 7.6.3, GHC == 7.8.4, GHC == 7.10.2, GHC == 8.0.1, GHC == 8.2.1
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Data.Monoid.Same, Data.Monoid.Different
-  ghc-options:         -Wall -fwarn-tabs -threaded -rtsopts
+  exposed-modules:     Data.Monoid.Same, Data.Monoid.Unique
+  ghc-options:         -Wall -fwarn-tabs
   build-depends:       base >= 4.6 && < 5, containers >= 0.4
   default-language:    Haskell2010
 

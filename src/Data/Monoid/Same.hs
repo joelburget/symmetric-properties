@@ -1,3 +1,4 @@
+-- | Monoidal witness that all items in a bag are the same.
 module Data.Monoid.Same (Same(..), allSame, allSame_) where
 
 import Data.Foldable (Foldable, toList)
@@ -6,9 +7,12 @@ import Data.Monoid (Monoid(..))
 -- | Monoid under every element being equal.
 data Same a
   = DegenerateSame
+  -- ^ Witness that all of no items are equal
   | NotSame a a
+  -- ^ Witness that two items are not equal
   | Same a
-  deriving (Eq, Show)
+  -- ^ Witness of item that everything is equal to
+  deriving (Eq, Ord, Show)
 
 instance Eq a => Monoid (Same a) where
   mempty = DegenerateSame
@@ -21,10 +25,11 @@ instance Eq a => Monoid (Same a) where
   mappend ns@(NotSame _ _) _ = ns
   mappend _ ns@(NotSame _ _) = ns
 
--- | Is every element of this foldable equal?
+-- | What is every element of this foldable?
 allSame :: (Eq a, Foldable f) => f a -> Same a
 allSame = allSame' . toList
 
+-- | Is every element of this foldable equal?
 allSame_ :: (Eq a, Foldable f) => f a -> Bool
 allSame_ as
   | NotSame _ _ <- allSame as = False
