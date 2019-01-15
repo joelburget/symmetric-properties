@@ -29,6 +29,8 @@ library
   exposed-modules:     Data.Monoid.Same, Data.Monoid.Unique
   ghc-options:         -Wall -fwarn-tabs
   build-depends:       base >= 4.6 && < 5, containers >= 0.4
+  if !impl(ghc >= 8.0)
+    build-depends: semigroups == 0.18.*
   default-language:    Haskell2010
 
 test-suite symmetric-properties-test
