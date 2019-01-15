@@ -1,5 +1,5 @@
 name:                symmetric-properties
-version:             0.1.0.0
+version:             0.1.0.1
 synopsis:            Monoids for sameness and uniqueness.
 description:
   Test whether every element of a 'Foldable' is the 'Same' or 'Unique'.
